@@ -1,84 +1,46 @@
-// int main(){
-//     std::optional<std::variant<int, std::string>> cell{9};
-
-//     std::cout<<std::get<int>(cell.value_or("NA"))<<"\n";
-//     return 0;
-// }
+//g++ main.cpp -o example     -I ./muparserx     -I ./eigen     -I /usr/local/boost_1_82_0/boost_1_89_0     -L ./muparserx/build     -lmuparserx     -std=c++17
 
 
 #include <iostream>
- #include <fstream>
-#include "boost/property_tree/ptree.hpp"
-#include "boost/property_tree/json_parser.hpp"
 #include <string>
-#include <variant>
-#include <optional>
- #include <Eigen/Dense>
-#include<variant>
- using Column = std::variant<Eigen::VectorXd, Eigen::VectorXi>;
-class ReadTable{
+#include <limits> 
+#include "ODE.hpp"
+#include "RawData.hpp"
+#include "RawDataJSON.hpp"
+#include "ProcessData.hpp"
+#include "StatisticalAnalyses.hpp"
 
-std::string path_;
+int main(int argc, char* argv[]) {
+    // Check for correct number of arguments
 
-std::vector<Column> dataframe_;
-std::vector<std::string> variables_; 
-std::vector<bool> isCategorical_;
-std::vector<std::vector<std::string>> labels_; 
-
-ReadTable(std::string& path): path_{path} {};
-
- std::vector<Column> getDataframe() const {
-    return dataframe_;
- }
- Column getColumn(unsigned int index){
-    return dataframe_[index];
-}
-
-
-bool isCategorical(int index){
-    return isCategorical_[index];
-}
-
-
-std::vector<std::string> getVariabes(){
-    return variables_;
-}; 
-
-
-std::vector<std::vector<std::string>>  getLabels(){
-    return labels_;
-}
-
- virtual void readTable()=0;
-
-};
-
-class ReadTableJSON : public ReadTable{
-    using boost::property_tree::ptree;
-
-void ReadTable ()override{
-    return;
-}
-
-};
-
-
-
-
-
-
-
-
-int main() {
-
-    std::ifstream jsonFile("input.txt");
-
-    ptree pt;
-    read_json(jsonFile, pt);
-
-    for (auto & array_element: pt) {
-        for (auto & property: array_element.second) {
-            std::cout << property.first << " = " << property.second.get_value < std::string > () << "\n";
-        }
+    if (argc != 3) {
+        std::cerr << "Usage: " << argv[0] << " <input_file_path> <output_report_path>" << std::endl;
+        return 1;
     }
+
+    // Parse filenames from command line arguments
+    const std::string inputPath = argv[1];
+    const std::string outputPath = argv[2];
+
+    try {
+       
+
+
+ RawDataJSON rd(inputPath);
+
+ ProcessedData pd(rd);
+
+ StatisticalAnalyses analyses(pd);
+ 
+        analyses.generateReport(outputPath);
+
+    } catch (const std::exception& e) {
+        std::cerr << "An unexpected error occurred during analysis: " << e.what() << std::endl;
+        return 1;
+    } catch (...) {
+        std::cerr << "An unknown error occurred." << std::endl;
+        return 1;
+    }
+
+    return 0;
 }
