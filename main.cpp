@@ -7,8 +7,11 @@
 #include "ODE.hpp"
 #include "RawData.hpp"
 #include "RawDataJSON.hpp"
+#include "RawDataCSV.hpp"
 #include "ProcessData.hpp"
 #include "StatisticalAnalyses.hpp"
+
+#include <filesystem>
 
 int main(int argc, char* argv[]) {
     // Check for correct number of arguments
@@ -24,11 +27,24 @@ int main(int argc, char* argv[]) {
 
     try {
        
+    std::filesystem::path p(inputPath);
+    std::string ext = p.extension().string();
 
+std::unique_ptr<RawData> rd;
+ if(ext==".json")
+ { 
+    
+    rd = std::make_unique<RawDataJSON>(inputPath);
+ }
+ else if(ext==".csv"){
+        rd = std::make_unique<RawDataCSV>(inputPath);
 
- RawDataJSON rd(inputPath);
+ }
 
- ProcessedData pd(rd);
+ else{
+            throw std::runtime_error(ext + " è un formato non valido: usa file con estensione .csv o .json");
+ }
+ProcessedData pd(*rd);
 
  StatisticalAnalyses analyses(pd);
  

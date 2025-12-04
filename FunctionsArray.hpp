@@ -12,9 +12,9 @@ std::array<mup::Value, size> values_;
 std::array<mup::ParserX, size> functions_;
 mup::Value time_;
 public:
-double getTime()const{
-    return time_.GetFloat();
-}
+// double getTime()const{
+//     return time_.GetFloat();
+// }
 
     FunctionsArray(const std::array<std::string, size>& functions) 
     {

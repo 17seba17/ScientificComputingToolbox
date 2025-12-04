@@ -3,7 +3,6 @@
 #define RAWDATACSV_HPP
 
 #include "RawData.hpp"
-#include "Types.hpp"
 
 #include <fstream>
 #include <sstream>
@@ -12,7 +11,7 @@
 
 class RawDataCSV : public RawData {
 public:
-    using RawData::RawData; // eredita il costruttore RawData(path)
+    RawDataCSV(std::string path) : RawData(path) {readTable();}
 
     void readTable() override {
         std::ifstream csvFile(path_);

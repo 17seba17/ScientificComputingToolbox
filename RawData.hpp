@@ -15,72 +15,10 @@
 #include <limits> 
 #include <map>
 #include <memory>
-enum class ExpectedType { 
-    Double, 
-    String,
-    Any
-};
-
-std::optional<std::variant<double, std::string>> getValue(const std::string& mystring, ExpectedType& type) {
- try {
-    if(mystring=="NA"){type = ExpectedType::Any;return std::nullopt;}
-        size_t pos = 0;
-        double result = std::stod(mystring, &pos);
-   
-if (pos == mystring.length()) {//conversione perfetta
- if (type == ExpectedType::Double || type == ExpectedType::Any) {
-                type = ExpectedType::Double;
-                return result; 
-            } else {
-                return std::nullopt;
-            }    
-}
-
-else {
-            return std::nullopt;
-        }
-
-    }//try
-
-    catch (const std::invalid_argument& e) {
-        if (type == ExpectedType::String || type == ExpectedType::Any) {
-            type = ExpectedType::String;
-            return mystring;
-        } else {
-              type = ExpectedType::Any;
-            return std::nullopt;
-        }
-    } // first catch
-
-    catch (const std::out_of_range& e) {
-        if (type == ExpectedType::String || type == ExpectedType::Any) {
-            type = ExpectedType::String;
-            return mystring;
-        } else {
-            type = ExpectedType::Any;
-            return std::nullopt;
-        }
-    } // second catch
-
-}
+#include "Type.hpp"
+#include "InfoColumn.hpp"
 
 
-struct InfoColumn{
-    std::unordered_map<std::string, int> labels_;
-    std::string variable_;
-    bool isCategorical_;
-    
-    void print()const{
- std::cout<<"Variabile: "<<variable_<<"\n";
- std::cout<<"Is categorical?: "<<isCategorical_<<"\n";
- if(isCategorical_)
-{std::cout<<"Labels: ";
-   for (auto const& [label, index] : labels_) { // Usa labelMap_
-                std::cout << label << " -> " << index << ", ";
-            }}
-std::cout<<"\n\n";
-    }
-};
 
 
 class RawData{
@@ -96,6 +34,7 @@ public:
 
 RawData(std::string path) : path_{path}, infoColumns_(std::make_unique<std::vector<InfoColumn>>()), rawdata_(std::make_unique<RawCells>()) {
 }
+virtual ~RawData() = default;
 
 
 std::unique_ptr<std::vector<InfoColumn>> getInfoColumns() {
