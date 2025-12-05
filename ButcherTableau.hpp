@@ -8,15 +8,18 @@ Eigen::VectorXd c_;
 size_t size_;
 
 void createC(){
-            
-int S_a =a_.size();
+
+
+
+    int S_a =a_.size();
 int S_b =b_.size();
 if((S_b-1)*S_b/2!=S_a){
     std::cerr<<"errore di compatibilità\n";
 }
 size_=S_b;
-c_.resize(S_b); 
+c_.resize(S_b);
 c_(0)=0.0;
+
 int count=1;
 double check=0.0;
 for(int i=0;i<S_b-1;i++){
@@ -27,6 +30,7 @@ for(int i=0;i<S_b-1;i++){
 for(int j=0;j<count;j++){
 sum+=(a_[count*(count-1)/2+j]);
 }
+count++;
 c_(i)=sum;
 
 }
@@ -42,13 +46,19 @@ createC();
 }
 
     ButcherTableau(std::vector<double> a, std::vector<double> b) : a_(std::move(a)) {
-b_(Eigen::Map<const Eigen::VectorXd>(b.data(), b.size())) ;
+b_=Eigen::VectorXd(b.size());
+
+for(int i=0;i<b.size();i++){
+
+               
+
+    b_(i)=b[i];
+}
 createC();
 }
 
 double getA(unsigned int i, unsigned int j)const{
 if(i>=j){return 0.0;}
-if(i==0){return 0.0;}
 return a_[j*(j-1)/2+i];
 
 

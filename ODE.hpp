@@ -7,13 +7,13 @@
 
 template <std::size_t size>
 class ODE{
-
+protected:
    const ButcherTableau bt_;
-   const FunctionsArray<size> fa_;
-   Eigen::VectorXd status_; 
+    const FunctionsArray<size>& fa_;  
+    Eigen::VectorXd status_; 
    double time_;
 
-    ODE(ButcherTableau& bt, FunctionsArray<size>& fa, Eigen::VectorXd status, double time) : bt_(bt), fa_(fa), status_(status), time_(time) {
+    ODE(const ButcherTableau& bt, const FunctionsArray<size>& fa, Eigen::VectorXd status, double time) : bt_(bt), fa_(fa), status_(status), time_(time) {
 
  if (this->status_.size() != size) {
             throw std::invalid_argument("Initial status vector size does not match template size.");
@@ -23,29 +23,36 @@ class ODE{
 
 
 void evolve(double dt){
-    Eigen::MatrixXd M(size, size); 
 
-    for(int i=0;i<size;i++){
+
+
+    Eigen::MatrixXd M(size, bt_.size()); 
+    for(int i=0;i<bt_.size();i++){
 
     double t2=time_+bt_.getC(i);
     Eigen::VectorXd now=status_;
     for(int j=0;j<i;j++){
+auto bbb=M.col(j);
+
+
         now=now+dt*bt_.getA(j,i)*M.col(j);
-    
-    }
-
-    M.col(i)=fa_.functionResult(t2, now);
 
     }
 
-    status_+=dt*M*bt_.getB();
+ auto a=fa_.functionResult(now,t2);
+
+    M.col(i)=a;
+
+    }
+
+     status_+=dt*M*bt_.getB();
     time_+=dt;
 
 }
 
+public:
 
-
-    void simulate(double dt, int num_steps, const std::string& output_filename) {
+    void simulate(double dt, int num_steps, const std::string& output_filename)  {
         
         std::ofstream outfile(output_filename);
         if (!outfile.is_open()) {
@@ -87,12 +94,11 @@ void evolve(double dt){
 
 // Forward Euler, RK4, and (bonus) the explicit midpoint method.
 
-
 template <std::size_t size>
 class ForwardEuler : public ODE<size> { 
 public:
     ForwardEuler(const FunctionsArray<size>& fa, const Eigen::VectorXd& status, double time) 
-    : ODE<size>(ButcherTableau({},{1.0}),fa,status,time) {}
+    : ODE<size>(ButcherTableau({}, std::vector<double>{1.0}), fa, status, time) {}
 };
 
 
@@ -100,21 +106,21 @@ template <std::size_t size>
 class RK4 : public ODE<size> {
 public:
     RK4(const FunctionsArray<size>& fa, const Eigen::VectorXd& status,double time) 
-    : ODE<size>(ButcherTableau({0.5,0,0.5,0,0,1},{1/6,1/3,1/3,1/6}),fa,status,time) {}
+    : ODE<size>(ButcherTableau({0.5,0,0.5,0,0,1},std::vector<double>{0.1666666,0.3333333,0.333333,0.1666666}),fa,status,time) {}
 };
 
 template <std::size_t size>
 class Rule_3_8 : public ODE<size> { 
 public:
     Rule_3_8(const FunctionsArray<size>& fa, const Eigen::VectorXd& status,double time) 
-    : ODE<size>(ButcherTableau({1/3,-1/3,1,1,-1,1},{1/8,3/8,3/8,1/8}),fa,status,time) {}
+    : ODE<size>(ButcherTableau({0.3333333,-0.3333333,1,1,-1,1},std::vector<double>{0.125,0.375,0.375,0.125}),fa,status,time) {}
 };
 
 template <std::size_t size>
 class SecondOrder : public ODE<size> { 
 public:
     SecondOrder(const FunctionsArray<size>& fa, const Eigen::VectorXd& status, double time,double alpha) 
-    : ODE<size>(ButcherTableau({alpha},{1-1/(2*alpha),  1/(2*alpha)}),fa,status,time) {}
+    : ODE<size>(ButcherTableau({alpha},std::vector<double>{1-1/(2*alpha),  1/(2*alpha)}),fa,status,time) {}
 };
 
 template <std::size_t size>
@@ -135,5 +141,5 @@ template <std::size_t size>
 class Ralston : public SecondOrder<size> { 
 public:
     Ralston(const FunctionsArray<size>& fa, const Eigen::VectorXd& status,double time) 
-    : SecondOrder<size>(fa,status,time,2/3) {}
+    : SecondOrder<size>(fa,status,time,0.666666) {}
 };
