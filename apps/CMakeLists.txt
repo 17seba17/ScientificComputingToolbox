@@ -5,12 +5,12 @@
 # --- Esempio 1: Eseguibile per l'ODE Solver ---
 
 set(ODE_APP_NAME ode_solver_app)
-set(ODE_APP_SRC resolve_ode.cpp)
+add_executable(${ODE_APP_NAME} resolve_ode.cpp)
 
-add_executable(${ODE_APP_NAME} ${ODE_APP_SRC})
-
-# Colleghiamo ODESolverLib. Tutte le sue proprietà PUBLIC (inclusi gli header 
-# MuparserX ora corretti) vengono ereditate automaticamente.
+# Linkando ODESolverLib, l'app eredita automaticamente:
+# - Il path di include di ODE/include
+# - Il path di include di muparserx root (per parser/mpParser.h)
+# - I flag di compilazione di Eigen
 target_link_libraries(${ODE_APP_NAME}
     PRIVATE
         ODESolverLib
@@ -19,15 +19,12 @@ target_link_libraries(${ODE_APP_NAME}
 # --- Esempio 2: Eseguibile per Data Analysis ---
 
 set(DATA_APP_NAME data_analysis_app)
-set(DATA_APP_SRC analyse_file.cpp)
-
-add_executable(${DATA_APP_NAME} ${DATA_APP_SRC})
+add_executable(${DATA_APP_NAME} analyse_file.cpp)
 
 target_link_libraries(${DATA_APP_NAME}
     PRIVATE
         DataAnalysisLib
 )
-
 
 # --- Installazione degli Eseguibili ---
 

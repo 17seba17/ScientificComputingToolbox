@@ -21,18 +21,17 @@ set(DATA_ANALYSIS_SRCS
 
 add_library(DataAnalysisLib SHARED ${DATA_ANALYSIS_SRCS} ${DATA_ANALYSIS_HDRS})
 
-# Publicly expose internal include directory
 target_include_directories(DataAnalysisLib PUBLIC
+    # Include interni per chi usa la libreria
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/StatisticalAnalyser/include>
-    # Espone la path di Boost pubblicamente (se DataAnalyser.hpp usa Boost)
-    PUBLIC ${BOOST_INCLUDE_DIR}
+    $<INSTALL_INTERFACE:include/ScientificFramework>
 )
 
-# Link dependencies
 target_link_libraries(DataAnalysisLib
     PUBLIC
         Eigen3::Eigen 
         muparserx
+        Boost::headers # Linka gli header di Boost trovati nella root
 )
 
 # --- MODULE B: ODE Solver Library ---
@@ -47,23 +46,23 @@ set(ODE_SOLVER_SRCS
     ODE/src/ButcherTableau.cpp
 )
 
-
-# 2. External System Headers (MUPARSERX FIX)
-# Usiamo SYSTEM PUBLIC per garantire che questa path assoluta 
-# venga propagata all'eseguibile che include FunctionsArray.hpp
 add_library(ODESolverLib SHARED ${ODE_SOLVER_SRCS} ${ODE_SOLVER_HDRS})
 
-# 1. Internal Interface Headers (needed by consumers)
+# GESTIONE INCLUDE PERFETTA:
+# 1. La cartella include locale di ODE
+# 2. La root di muparserx (per permettere #include <parser/mpParser.h>)
+# Usiamo SYSTEM per evitare warning da muparserx
 target_include_directories(ODESolverLib PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/ODE/include>
+    $<INSTALL_INTERFACE:include/ScientificFramework>
 )
 
-# 2. FIX: Aggiungi il percorso genitore che contiene la directory 'parser/'
-# Stiamo usando SYSTEM PUBLIC perché è un header esterno e non deve generare warning
 target_include_directories(ODESolverLib SYSTEM PUBLIC
-    /usr/local/include
+    $<BUILD_INTERFACE:${MUPARSERX_ROOT_DIR}>
 )
 
+# Link dependencies
+# Usiamo PUBLIC perché gli header di ODESolverLib includono header di Eigen e Muparserx
 target_link_libraries(ODESolverLib
     PUBLIC
         Eigen3::Eigen
