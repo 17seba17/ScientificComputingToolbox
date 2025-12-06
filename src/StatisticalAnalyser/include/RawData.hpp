@@ -23,10 +23,10 @@ class RawData {
 protected:
   using RawCells =
       std::vector<std::optional<std::variant<double, std::string>>>;
+  std::string path_;
   // we use unique_ptr to perform std::move
   std::unique_ptr<std::vector<Detail::InfoColumn>> infoColumns_;
   std::unique_ptr<RawCells> rawdata_;
-  std::string path_;
 
 public:
   // constructor

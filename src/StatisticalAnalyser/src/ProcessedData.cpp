@@ -15,7 +15,7 @@ void ProcessedData::processData() {
   }
   int observations = rawdatasize / infocolsize;
 
-  for (int i = 0; i < infoColumns_->size(); i++) {
+  for (unsigned int i = 0; i < infoColumns_->size(); i++) {
 
     int NANs = 0;
     double reduced_sum = 0.0;
@@ -85,9 +85,8 @@ void ProcessedData::processData() {
   int freq_idx = 0;
   double nan_value = std::numeric_limits<double>::quiet_NaN();
 
-  for (int i = 0; i < infoColumns_->size(); i++) {
+  for (unsigned int i = 0; i < infoColumns_->size(); i++) {
     bool isCategorical = (*infoColumns_)[i].isCategorical_;
-    bool impute = areThereNans[i];
     double imputation_value;
 
     if (isCategorical) {
@@ -99,7 +98,7 @@ void ProcessedData::processData() {
     }
 
     int r = 0;
-    for (int j_raw = i; j_raw < rawdata_->size();
+    for (unsigned int j_raw = i; j_raw < rawdata_->size();
          j_raw += (infoColumns_->size()), r++) {
       auto thiscell = (*rawdata_)[j_raw];
       double final_value = nan_value;

@@ -44,7 +44,7 @@ ButcherTableau::ButcherTableau(std::vector<double> a, Eigen::VectorXd b)
 ButcherTableau::ButcherTableau(std::vector<double> a, std::vector<double> b)
     : a_(std::move(a)) {
   b_ = Eigen::VectorXd(b.size());
-  for (int i = 0; i < b.size(); i++) {
+  for (unsigned int i = 0; i < b.size(); i++) {
     b_(i) = b[i];
   }
   createC();

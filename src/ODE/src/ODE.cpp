@@ -17,11 +17,11 @@ ODE::ODE(const ButcherTableau &bt, const FunctionsArray<size> &fa,
 template <std::size_t size> void ODE::evolve(double dt) {
 
   Eigen::MatrixXd M(size, bt_.size());
-  for (int i = 0; i < bt_.size(); i++) {
+  for (unsigned int i = 0; i < bt_.size(); i++) {
 
     double t2 = time_ + bt_.getC(i);
     Eigen::VectorXd now = status_;
-    for (int j = 0; j < i; j++) {
+    for (unsigned int j = 0; j < i; j++) {
       auto bbb = M.col(j);
 
       now = now + dt * bt_.getA(j, i) * M.col(j);
@@ -54,18 +54,18 @@ void ODE::simulate(double dt, int num_steps,
 
   outfile << time_;
 
-  for (int i = 0; i < status_.size(); ++i) {
+  for (unsigned int i = 0; i < status_.size(); ++i) {
     outfile << "," << status_(i);
   }
   outfile << "\n";
 
-  for (int step = 0; step < num_steps; ++step) {
+  for (unsigned int step = 0; step < num_steps; ++step) {
 
     evolve(dt);
 
     outfile << time_;
 
-    for (int i = 0; i < status_.size(); ++i) {
+    for (unsigned int i = 0; i < status_.size(); ++i) {
       outfile << "," << status_(i);
     }
     outfile << "\n";

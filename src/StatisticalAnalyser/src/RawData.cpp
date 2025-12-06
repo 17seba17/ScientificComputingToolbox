@@ -12,12 +12,12 @@ void RawData::print() {
   }
   int observations = rawdatasize / infocolsize;
 
-  for (int i = 0; i < infoColumns_->size(); i++) {
+  for (unsigned int i = 0; i < infoColumns_->size(); i++) {
     std::cout << (*infoColumns_)[i].variable_ << ",";
   }
   std::cout << "\n\n";
   for (int i = 0; i < observations; i++) {
-    for (int j = 0; j < infoColumns_->size(); j++) {
+    for (unsigned int j = 0; j < infoColumns_->size(); j++) {
       if ((*infoColumns_)[j].isCategorical_) {
         std::cout << std::get<std::string>(
                          (*rawdata_)[j + i * infoColumns_->size()].value_or(

@@ -26,11 +26,11 @@ template <std::size_t size>
 Eigen::VectorXd FunctionsArray::functionResult(const Eigen::VectorXd &input,
                                                double time) const {
   Eigen::VectorXd output(size);
-  for (int i = 0; i < size; i++) {
+  for (unsigned int i = 0; i < size; i++) {
     values_[i] = input(i);
   }
   time_ = time;
-  for (int i = 0; i < size; i++) {
+  for (unsigned int i = 0; i < size; i++) {
 
     mup::Value result = functions_[i]->Eval();
 

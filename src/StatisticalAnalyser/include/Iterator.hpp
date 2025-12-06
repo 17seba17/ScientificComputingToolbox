@@ -1,6 +1,6 @@
 #ifndef ITERATOR_HPP
 #define ITERATOR_HPP
-
+#include <Eigen/Dense>
 namespace SCT {
 namespace StatisticalAnalyses {
 
@@ -42,12 +42,14 @@ private:
 
 struct RowView {
   const Eigen::MatrixXd &mat;
+  RowView(const Eigen::MatrixXd &m) : mat(m) {}
   RowIterator begin() const { return RowIterator(&mat, 0); }
   RowIterator end() const { return RowIterator(&mat, mat.rows()); }
 };
 
 struct ColView {
   const Eigen::MatrixXd &mat;
+  ColView(const Eigen::MatrixXd &m) : mat(m) {}
   ColIterator begin() const { return ColIterator(&mat, 0); }
   ColIterator end() const { return ColIterator(&mat, mat.cols()); }
 };

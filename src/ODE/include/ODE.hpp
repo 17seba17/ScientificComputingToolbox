@@ -31,13 +31,11 @@ protected:
   void evolve(double dt) {
 
     Eigen::MatrixXd M(size, bt_.size());
-    for (int i = 0; i < bt_.size(); i++) {
+    for (unsigned int i = 0; i < bt_.size(); i++) {
 
       double t2 = time_ + bt_.getC(i);
       Eigen::VectorXd now = status_;
-      for (int j = 0; j < i; j++) {
-        auto bbb = M.col(j);
-
+      for (unsigned int j = 0; j < i; j++) {
         now = now + dt * bt_.getA(j, i) * M.col(j);
       }
 
@@ -60,14 +58,14 @@ public:
     }
 
     outfile << "t";
-    for (std::size_t i = 0; i < size; ++i) {
+    for (unsigned i = 0; i < size; ++i) {
       outfile << ",x" << i;
     }
     outfile << "\n";
 
     outfile << time_;
 
-    for (int i = 0; i < status_.size(); ++i) {
+    for (unsigned int i = 0; i < status_.size(); ++i) {
       outfile << "," << status_(i);
     }
     outfile << "\n";
@@ -78,7 +76,7 @@ public:
 
       outfile << time_;
 
-      for (int i = 0; i < status_.size(); ++i) {
+      for (unsigned int i = 0; i < status_.size(); ++i) {
         outfile << "," << status_(i);
       }
       outfile << "\n";

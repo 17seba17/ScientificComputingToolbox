@@ -18,7 +18,7 @@ double DataAnalyser::calculateVariance(int colIndex) const {
   double mean = calculateMean(colIndex);
   double sum_sq_diff = 0.0;
 
-  for (int i = 0; i < processed_data->rows(); ++i) {
+  for (unsigned int i = 0; i < processed_data->rows(); ++i) {
     double val = (*processed_data)(i, colIndex);
     sum_sq_diff += (val - mean) * (val - mean);
   }
@@ -55,7 +55,7 @@ std::map<std::string, int>
 DataAnalyser::calculateFrequencyCount(int colIndex) const {
   std::map<std::string, int> freqMap;
 
-  if (colIndex < 0 || colIndex >= infoColumns_->size()) {
+  if (colIndex < 0 || colIndex >= static_cast<int>(infoColumns_->size())) {
     return freqMap;
   }
 
@@ -68,7 +68,7 @@ DataAnalyser::calculateFrequencyCount(int colIndex) const {
     }
   }
 
-  for (int i = 0; i < processed_data->rows(); ++i) {
+  for (unsigned int i = 0; i < processed_data->rows(); ++i) {
     double val = (*processed_data)(i, colIndex);
 
     std::string key;
@@ -118,8 +118,8 @@ Eigen::MatrixXd DataAnalyser::calculateCorrelationMatrix() const {
 
   Eigen::MatrixXd corr(cov.rows(), cov.cols());
 
-  for (int i = 0; i < cov.rows(); ++i) {
-    for (int j = 0; j < cov.cols(); ++j) {
+  for (unsigned int i = 0; i < cov.rows(); ++i) {
+    for (unsigned int j = 0; j < cov.cols(); ++j) {
       double stdDevI = std::sqrt(cov(i, i));
       double stdDevJ = std::sqrt(cov(j, j));
 
@@ -187,13 +187,13 @@ void DataAnalyser::generateReport(const std::string &filename) const {
 
   Eigen::MatrixXd corrMat = calculateCorrelationMatrix();
 
-  for (int i = 0; i < corrMat.rows(); ++i) {
+  for (unsigned int i = 0; i < corrMat.rows(); ++i) {
     std::string name = (*infoColumns_)[i].variable_;
     if (name.length() > 10)
       name = name.substr(0, 10);
     file << std::setw(12) << name;
 
-    for (int j = 0; j < corrMat.cols(); ++j) {
+    for (unsigned int j = 0; j < corrMat.cols(); ++j) {
       file << std::setw(12) << std::fixed << std::setprecision(4)
            << corrMat(i, j);
     }
