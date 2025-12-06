@@ -1,12 +1,9 @@
-#ifndef RAWDATAJSON_HPP
-#define RAWDATAJSON_HPP
-#include "RawData.hpp"
+#include "RawDataJSON.hpp"
+namespace SCT{
+namespace StatisticalAnalyses{
 
-class RawDataJSON : public RawData{
-    public:
-    RawDataJSON(std::string path) : RawData(path) {readTable();}
-    
-    void  readTable () override{
+
+    void  RawDataJSON::readTable () {
 
 
 
@@ -17,25 +14,25 @@ class RawDataJSON : public RawData{
     read_json(jsonFile, pt);
 
     // ricerca variabili
-std::unordered_map<std::string, InfoColumn> myvar;
+std::unordered_map<std::string, Detail::InfoColumn> myvar;
 
     for (auto & array_element: pt) {
         for (auto & property: array_element.second) {
-auto type= ExpectedType::Any;
+auto type= Detail::ExpectedType::Any;
 auto value= getValue(property.second.data(), type);
-if(type!=ExpectedType::Any)
+if(type!=Detail::ExpectedType::Any)
 {
-    InfoColumn ic;
+    Detail::InfoColumn ic;
     
-double categorical=(type==ExpectedType::String)?true:false;
+double categorical=(type==Detail::ExpectedType::String)?true:false;
 
 ic.isCategorical_=categorical;
 ic.variable_=property.first;
 
   auto [it, inserted] = myvar.emplace(property.first, std::move(ic)); 
 
-if(type==ExpectedType::String){  
-    InfoColumn& info = it->second; 
+if(type==Detail::ExpectedType::String){  
+    Detail::InfoColumn& info = it->second; 
     info.labels_.emplace(property.second.data(), info.labels_.size());
 
             }
@@ -55,7 +52,7 @@ if(type==ExpectedType::String){
 for (auto & array_element: pt) {
 for(auto const& column : (*infoColumns_)){
    
-    auto type= column.isCategorical_ ? ExpectedType::String : ExpectedType::Double;
+    auto type= column.isCategorical_ ? Detail::ExpectedType::String : Detail::ExpectedType::Double;
 
     auto it = std::find_if(
     array_element.second.begin(), 
@@ -82,9 +79,4 @@ else {
 }//read Table
 
 
-
-};
-
-
-
-#endif
+}}

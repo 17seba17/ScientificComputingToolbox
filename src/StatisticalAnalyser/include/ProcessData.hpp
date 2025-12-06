@@ -15,6 +15,9 @@
 #include <memory>
 
 
+namespace SCT{
+namespace StatisticalAnalyses{
+
 double mostFrequent(const std::vector<double>& vec) {
 
     std::unordered_map<double, int> conteggi;
@@ -42,13 +45,13 @@ double mostFrequent(const std::vector<double>& vec) {
 
 class ProcessedData{
 using RawCells=std::vector<std::optional<std::variant<double, std::string>>>;
- std::unique_ptr<std::vector<InfoColumn>> infoColumns_;
+ std::unique_ptr<std::vector<Detail::InfoColumn>> infoColumns_;
  std::unique_ptr<RawCells> rawdata_; 
 std::unique_ptr<Eigen::MatrixXd> processed_data;
 public:
 
 
-std::unique_ptr<std::vector<InfoColumn>> getInfoColumns() {
+std::unique_ptr<std::vector<Detail::InfoColumn>> getInfoColumns() {
     return std::move(infoColumns_);
 }
 
@@ -195,5 +198,7 @@ catch(...){std::cerr<<"error caught";areThereNans.back()=true;}
 
 
 };
+
+}}//namespaces
 
 #endif

@@ -1,7 +1,11 @@
 #ifndef ITERATOR_HPP
 #define ITERATOR_HPP
 
-class RowIterator {
+
+namespace SCT{
+namespace StatisticalAnalyses{
+
+    class RowIterator {
     public:
 
 
@@ -58,5 +62,5 @@ class RowIterator {
         ColIterator begin() const { return ColIterator(&mat, 0); }
         ColIterator end() const   { return ColIterator(&mat, mat.cols()); }
     };
-
+}}
     #endif

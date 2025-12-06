@@ -5,6 +5,10 @@
 #include <string>
 #include <iostream>
 
+namespace SCT{
+namespace StatisticalAnalyses{
+namespace Detail{
+
 struct InfoColumn{
     std::unordered_map<std::string, int> labels_;
     std::string variable_;
@@ -21,6 +25,6 @@ struct InfoColumn{
 std::cout<<"\n\n";
     }
 };
-
+}}}//namespaces
 
 #endif //INFOCOLUMN_HPP

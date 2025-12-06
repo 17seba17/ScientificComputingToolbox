@@ -7,6 +7,9 @@
 #include<variant>
 #include <stdexcept>
 
+namespace SCT{
+namespace StatisticalAnalyses{
+namespace Detail{
 enum class ExpectedType { 
     Double, 
     String,
@@ -55,4 +58,6 @@ else {
     } // second catch
 
 }
+
+}}}//namespaces
 #endif

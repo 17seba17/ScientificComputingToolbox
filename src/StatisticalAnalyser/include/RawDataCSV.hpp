@@ -9,6 +9,9 @@
 #include <stdexcept>
 #include <vector>
 
+namespace SCT{
+namespace StatisticalAnalyses{
+
 class RawDataCSV : public RawData {
 public:
     RawDataCSV(std::string path) : RawData(path) {readTable();}
@@ -36,14 +39,14 @@ public:
         rawdata_->clear();
 
         for (const auto& h : headers) {
-            InfoColumn ic;
+            Detail::InfoColumn ic;
             ic.variable_ = h;
             ic.isCategorical_ = false; // lo decideremo dopo
             infoColumns_->push_back(std::move(ic));
         }
 
         // tipo "aggregato" di ogni colonna
-        std::vector<ExpectedType> colTypes(ncols, ExpectedType::Any);
+        std::vector<Detail::ExpectedType> colTypes(ncols, Detail::ExpectedType::Any);
 
         std::size_t lineNumber = 1; // abbiamo già letto l'header
 
@@ -76,9 +79,9 @@ public:
 
         // 3) Finalizzo InfoColumn (isCategorical_ + labels_ per stringhe)
         for (std::size_t j = 0; j < ncols; ++j) {
-            InfoColumn& col = (*infoColumns_)[j];
-            ExpectedType t = colTypes[j];
-            col.isCategorical_ = (t == ExpectedType::String);
+            Detail::InfoColumn& col = (*infoColumns_)[j];
+            Detail::ExpectedType t = colTypes[j];
+            col.isCategorical_ = (t == Detail::ExpectedType::String);
 
             if (!col.isCategorical_) {
                 continue;
@@ -119,4 +122,5 @@ private:
     }
 };
 
+}}//namespaces
 #endif // RAWDATACSV_HPP

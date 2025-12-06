@@ -15,29 +15,30 @@
 #include <limits> 
 #include <map>
 #include <memory>
-#include "Type.hpp"
-#include "InfoColumn.hpp"
+#include "detail/Type.hpp"
+#include "detail/InfoColumn.hpp"
 
-
+namespace SCT{
+namespace StatisticalAnalyses{
 
 
 class RawData{
     protected:
     using RawCells=std::vector<std::optional<std::variant<double, std::string>>>;
 
-std::unique_ptr<std::vector<InfoColumn>> infoColumns_;
+std::unique_ptr<std::vector<Detail::InfoColumn>> infoColumns_;
 std::unique_ptr<RawCells> rawdata_; //1000,34,NA,verde,NA,12000,24,136,rosso,donna...
 std::string path_;
 
 
 public:
 
-RawData(std::string path) : path_{path}, infoColumns_(std::make_unique<std::vector<InfoColumn>>()), rawdata_(std::make_unique<RawCells>()) {
+RawData(std::string path) : path_{path}, infoColumns_(std::make_unique<std::vector<Detail::InfoColumn>>()), rawdata_(std::make_unique<RawCells>()) {
 }
 virtual ~RawData() = default;
 
 
-std::unique_ptr<std::vector<InfoColumn>> getInfoColumns() {
+std::unique_ptr<std::vector<Detail::InfoColumn>> getInfoColumns() {
     return std::move(infoColumns_);
 }
 
@@ -83,5 +84,5 @@ std::cout<<"\n";
 
 };
 
-
+}}//namespaces
 #endif

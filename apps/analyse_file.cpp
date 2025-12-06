@@ -1,16 +1,16 @@
 //g++ main.cpp -o example     -I ./muparserx     -I ./eigen     -I /usr/local/boost_1_82_0/boost_1_89_0     -L ./muparserx/build     -lmuparserx     -std=c++17
 
 
-#include <iostream>
-#include <string>
-#include <limits> 
-#include "ODE.hpp"
-#include "RawData.hpp"
-#include "RawDataJSON.hpp"
-#include "RawDataCSV.hpp"
-#include "ProcessData.hpp"
-#include "DataAnalyser.hpp"
-#include <filesystem>
+// #include <iostream>
+// #include <string>
+// #include <limits> 
+// #include "ODE.hpp"
+// #include "RawData.hpp"
+// #include "RawDataJSON.hpp"
+// #include "RawDataCSV.hpp"
+// #include "ProcessData.hpp"
+// #include "DataAnalyser.hpp"
+// #include <filesystem>
 
 // int main(int argc, char* argv[]) {
 //     // Check for correct number of arguments
@@ -76,14 +76,16 @@ int main(){
 
 
 
-                           Eigen::VectorXd input(2);
-                    input(0)=0;
-                    input(1)=1;
+//                            Eigen::VectorXd input(2);
+//                     input(0)=0;
+//                     input(1)=1;
 
-SCT::ODE::FunctionsArray<2> functions({"x1","-x0"}); // Oggetto 1
+// SCT::ODE::FunctionsArray<2> functions({"x1","-x0"}); // Oggetto 1
 
-SCT::ODE::Ralston<2> fe(functions, input, 0); 
-      std::string s="ode.txt";
-       fe.simulate(0.0025,3000,s);
+// SCT::ODE::Ralston<2> fe(functions, input, 0); 
+//       std::string s="ode.txt";
+//        fe.simulate(0.0025,3000,s);
+
+return 0;
     
 }

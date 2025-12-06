@@ -18,18 +18,21 @@
 #include "ProcessData.hpp"
 
 
-class StatisticalAnalyses {
+namespace SCT{
+namespace StatisticalAnalyses{
+
+class DataAnalyser {
 public:
 
 private:
     using RawCells = std::vector<std::optional<std::variant<double, std::string>>>;
     
 
-    const std::unique_ptr<std::vector<InfoColumn>> infoColumns_;
+    const std::unique_ptr<std::vector<Detail::InfoColumn>> infoColumns_;
     const std::unique_ptr<Eigen::MatrixXd> processed_data;
 
 public:
-    StatisticalAnalyses(ProcessedData& pd) : infoColumns_(pd.getInfoColumns()), processed_data(pd.getProcessData())  {
+    DataAnalyser(ProcessedData &pd) : infoColumns_(pd.getInfoColumns()), processed_data(pd.getProcessData())  {
     }
 
 
@@ -241,5 +244,8 @@ public:
         return ColView{(*processed_data)};
     }
 };
+
+
+}}//namespaces
 
 #endif 

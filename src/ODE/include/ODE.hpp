@@ -1,9 +1,15 @@
+#ifndef ODE_HPP
+#define ODE_HPP
+
 #include "FunctionsArray.hpp"
 #include "ButcherTableau.hpp"
 
 #include <fstream>
 #include <string>
 #include <stdexcept> 
+#include <Eigen/Dense>
+namespace SCT{
+namespace ODE{
 
 template <std::size_t size>
 class ODE{
@@ -143,3 +149,7 @@ public:
     Ralston(const FunctionsArray<size>& fa, const Eigen::VectorXd& status,double time) 
     : SecondOrder<size>(fa,status,time,0.666666) {}
 };
+
+}}//namespaces
+
+#endif

@@ -1,3 +1,6 @@
+#ifndef FUNCTIONS_ARRAY_HPP
+#define FUNCTIONS_ARRAY_HPP
+
 #include <array>
 #include <string>
 #include <parser/mpParser.h> 
@@ -5,6 +8,10 @@
 
 
 #include <memory> // Necessario per unique_ptr
+
+namespace SCT{
+namespace ODE{
+
 template <std::size_t size>
 class FunctionsArray {
 
@@ -57,3 +64,7 @@ Eigen::VectorXd functionResult( const Eigen::VectorXd& input, double time ) cons
 }
 
 };
+
+}}//namespaces
+
+#endif
